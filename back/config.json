@@ -1,0 +1,9 @@
+{
+  "dev": {
+    "username": "root",
+    "password": "1234",
+    "database": "conectados",
+    "host": "localhost",
+    "port": "3300"
+  }
+}
