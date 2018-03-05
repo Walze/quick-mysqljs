@@ -26,7 +26,7 @@ class Database {
 
     this.queryPromiseHandler = (query, ...params) => _queryPromiseHandler(query, params)
     this.getConnection = callback => callback(_connection)
-    this._mysql = mysql
+    this._mysql = (() => mysql)()
   }
 
   query(query, params = false) {
@@ -64,27 +64,27 @@ class Database {
   }
 
   find(table, where) {
-    const query = `SELECT * FROM ${table} WHERE ?`
+    const query = this._mysql.format(`SELECT * FROM ${table} WHERE ?`, where)
 
-    return this.queryPromiseHandler(query, where)
+    return this.queryPromiseHandler(query)
   }
 
   insert(table, what) {
-    const query = `INSERT INTO ${table} SET ?`
+    const query = this._mysql.format(`INSERT INTO ${table} SET ?`, what)
 
-    return this.queryPromiseHandler(query, what)
+    return this.queryPromiseHandler(query)
   }
 
   update(table, set, where) {
     const query = this._mysql.format(`UPDATE ${table} SET ? WHERE ?`, [set, where])
-    console.log(query)
+
     return this.queryPromiseHandler(query)
   }
 
   delete(table, where) {
-    const query = `DELETE FROM ${table} WHERE ?`
+    const query = this._mysql.format(`DELETE FROM ${table} WHERE ?`, where)
 
-    return this.queryPromiseHandler(query, where)
+    return this.queryPromiseHandler(query)
   }
 }
 
