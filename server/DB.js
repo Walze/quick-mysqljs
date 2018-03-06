@@ -15,34 +15,34 @@ class Database {
       if (!params.length) params = false
 
       return new Promise((resolve, reject) =>
-
-        this.query(query, params).then((err, result) => {
-          if (err) reject(err)
-          else resolve(result)
-        })
-
+        this.query(query, params).then((err, result) => this._promiseRejRes(err, result))
       )
     }
 
     this.queryPromiseHandler = (query, ...params) => _queryPromiseHandler(query, params)
     this.getConnection = callback => callback(_connection)
-    this._mysql = (() => mysql)()
+
+    this._mysql = mysql
+  }
+
+  _promiseRejRes(err, result) {
+    if (err) reject(err)
+    else resolve(result)
+  }
+
+  get mysql() {
+    return this._mysql
   }
 
   query(query, params = false) {
     return new Promise((resolve, reject) =>
       this.getConnection(connection => {
 
-        const callback = (err, result) => {
-          if (err) reject(err)
-          else resolve(result)
-        }
-
         if (typeof params === 'object')
-          connection.query(query, params, (err, result) => callback(err, result))
+          connection.query(query, params, (err, result) => this._promiseRejRes(err, result))
 
         else if (params === false)
-          connection.query(query, (err, result) => callback(err, result))
+          connection.query(query, (err, result) => this._promiseRejRes(err, result))
 
         else
           throw new error('Wrong type on 2nd param.')
@@ -64,25 +64,25 @@ class Database {
   }
 
   find(table, where) {
-    const query = this._mysql.format(`SELECT * FROM ${table} WHERE ?`, where)
+    const query = this.mysql.format(`SELECT * FROM ${table} WHERE ?`, where)
 
     return this.queryPromiseHandler(query)
   }
 
   insert(table, what) {
-    const query = this._mysql.format(`INSERT INTO ${table} SET ?`, what)
+    const query = this.mysql.format(`INSERT INTO ${table} SET ?`, what)
 
     return this.queryPromiseHandler(query)
   }
 
   update(table, set, where) {
-    const query = this._mysql.format(`UPDATE ${table} SET ? WHERE ?`, [set, where])
+    const query = this.mysql.format(`UPDATE ${table} SET ? WHERE ?`, [set, where])
 
     return this.queryPromiseHandler(query)
   }
 
   delete(table, where) {
-    const query = this._mysql.format(`DELETE FROM ${table} WHERE ?`, where)
+    const query = this.mysql.format(`DELETE FROM ${table} WHERE ?`, where)
 
     return this.queryPromiseHandler(query)
   }
