@@ -11,18 +11,16 @@ class Database {
       port: config.port
     })
 
-    const _queryPromiseHandler = (query, params) => {
-      if (!params.length) params = false
-
-      return new Promise((resolve, reject) =>
-        this.query(query, params).then((err, result) => this._promiseRejRes(err, result))
-      )
-    }
-
-    this.queryPromiseHandler = (query, ...params) => _queryPromiseHandler(query, params)
     this.getConnection = callback => callback(_connection)
-
     this._mysql = mysql
+  }
+
+  run(query, ...params) {
+    if (!params.length) params = false
+
+    return new Promise((resolve, reject) =>
+      this._query(query, params).then((err, result) => this._promiseRejRes(err, result))
+    )
   }
 
   _promiseRejRes(err, result) {
@@ -34,7 +32,7 @@ class Database {
     return this._mysql
   }
 
-  query(query, params = false) {
+  _query(query, params = false) {
     return new Promise((resolve, reject) =>
       this.getConnection(connection => {
 
@@ -54,37 +52,37 @@ class Database {
   all(table) {
     const query = `SELECT * FROM ${table}`
 
-    return this.queryPromiseHandler(query)
+    return this.run(query)
   }
 
   id(table, id) {
     const query = `SELECT * FROM ${table} WHERE id = ${id}`
 
-    return this.queryPromiseHandler(query)
+    return this.run(query)
   }
 
   find(table, where) {
     const query = this.mysql.format(`SELECT * FROM ${table} WHERE ?`, where)
 
-    return this.queryPromiseHandler(query)
+    return this.run(query)
   }
 
   insert(table, what) {
     const query = this.mysql.format(`INSERT INTO ${table} SET ?`, what)
 
-    return this.queryPromiseHandler(query)
+    return this.run(query)
   }
 
   update(table, set, where) {
     const query = this.mysql.format(`UPDATE ${table} SET ? WHERE ?`, [set, where])
 
-    return this.queryPromiseHandler(query)
+    return this.run(query)
   }
 
   delete(table, where) {
     const query = this.mysql.format(`DELETE FROM ${table} WHERE ?`, where)
 
-    return this.queryPromiseHandler(query)
+    return this.run(query)
   }
 }
 
