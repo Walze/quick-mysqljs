@@ -1,3 +1,6 @@
+const db = require('./DB')
+
+
 function CrudListener(table, expressApp) {
 
   //all
@@ -37,7 +40,7 @@ function CrudListener(table, expressApp) {
 
   //delete
   expressApp.delete(`/${table}/:id`, (req, res) => {
-    db.delete(table, req.params.id)
+    db.delete(table, { id: req.params.id })
       .then(result => res.send(result))
       .catch(err => res.send(err))
   })

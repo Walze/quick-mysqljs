@@ -1,8 +1,8 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const app = express()
-const db = require('./DB')
 const crud = require('./CrudListener')
+const db = require('./DB')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -18,11 +18,6 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
 app.get('/', (req, res) => res.send("Got /"))
 
 
-
-
-let tables = ['categoria']
+const tables = ['categoria']
 
 tables.map(table => crud(table, app))
-
-
-
