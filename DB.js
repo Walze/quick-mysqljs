@@ -29,14 +29,11 @@ class Database {
 
       if (whereStart > -1)
         query = query.slice(0, whereStart + 6)
-
       if (counter >= Object.keys(where).length)
         query += `\`${prop}\` = '${where[prop]}'`
       else
         query += `\`${prop}\` = '${where[prop]}' AND `
-
     }
-
     return query
   }
 
@@ -78,7 +75,7 @@ class Database {
   }
 
   id(table, id) {
-    const query = `SELECT * FROM ${table} WHERE id = ${id}`
+    const query = `SELECT * FROM ${connection.escape(table)} WHERE id = ${id}`
 
     return this.run(query)
   }
@@ -97,10 +94,8 @@ class Database {
   }
 
   update(table, set, where) {
-    let query = this.mysql.format(`UPDATE ${table} SET ? WHERE ?`, [set])
+    let query = this.mysql.format(`UPDATE ${table} SET ? WHERE ?`, set)
     query = this._whereFix(query, where)
-
-    console.log(query)
 
     return this.run(query)
   }

@@ -18,6 +18,6 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
 app.get('/', (req, res) => res.send("Got /"))
 
 
-const tables = ['categoria']
+const tables = ['tablename']
 
 tables.map(table => crud(table, app))
