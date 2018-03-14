@@ -1,5 +1,3 @@
-const configFile = require('./config.json').dev
-
 class Database {
   constructor(config, mysql) {
 
@@ -108,4 +106,5 @@ class Database {
   }
 }
 
+const configFile = require('./config.json').dev
 module.exports = new Database(configFile, require('mysql'))
