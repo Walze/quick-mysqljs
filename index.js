@@ -18,7 +18,7 @@ app.listen(PORT, e => console.log(`Listening on port ${PORT}`))
 
 const db = require('./DB')
 
-db.run('SELEC2T 1 + 1 as sum')
+db.run('SELECT 1 + 1 as sum')
   .then(log)
   .catch(log)
 

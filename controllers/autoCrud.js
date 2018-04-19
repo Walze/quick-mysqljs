@@ -1,7 +1,7 @@
 const db = require('../DB')
 
 
-function CrudListener(table, express_instance) {
+function Crud_Listener(table, express_instance) {
 
   //all
   express_instance.get(`/${table}`, (req, res) => {
@@ -46,4 +46,4 @@ function CrudListener(table, express_instance) {
   })
 }
 
-module.exports = CrudListener
+module.exports = Crud_Listener

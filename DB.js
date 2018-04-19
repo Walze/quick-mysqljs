@@ -1,4 +1,4 @@
-const configFile = require('./config.json').dev
+const config_file = require('./config.json').dev
 
 class Database {
   constructor(config, mysql) {
@@ -15,14 +15,14 @@ class Database {
   }
 
   get mysql() {
-    return Object.assign({}, this._mysql)
+    return this._mysql
   }
 
   get connection() {
-    return Object.assign({}, this._connection)
+    return this._connection
   }
 
-  _whereFix(query, where) {
+  _where_fix(query, where) {
     let counter = 0
 
     for (let prop in where) {
@@ -102,4 +102,4 @@ class Database {
   }
 }
 
-module.exports = new Database(configFile, require('mysql'))
+module.exports = new Database(config_file, require('mysql'))
