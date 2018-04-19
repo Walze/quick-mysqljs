@@ -21,9 +21,9 @@ class Database {
   get connection() {
     return this._connection
   }
-  
+
   // Adds WHERE AND to each prop of obj
-  _where_fix(query, where) {
+  _where_replace(query, where) {
     let counter = 0
 
     for (let prop in where) {
@@ -40,7 +40,7 @@ class Database {
     }
     return query
   }
-  
+
   // Helper
   _callback_to_promise(error, result, resolve, reject) {
     if (error) reject(error)
@@ -78,7 +78,7 @@ class Database {
 
   find(table, where) {
     let query = this.mysql.format(`SELECT * FROM ${table} WHERE ?`)
-    query = this._whereFix(query, where)
+    query = this._where_replace(query, where)
 
     return this.run(query)
   }
@@ -91,14 +91,14 @@ class Database {
 
   update(table, set, where) {
     let query = this.mysql.format(`UPDATE ${table} SET ? WHERE ?`, set)
-    query = this._whereFix(query, where)
+    query = this._where_replace(query, where)
 
     return this.run(query)
   }
 
   delete(table, where) {
     let query = this.mysql.format(`DELETE FROM ${table} WHERE ?`)
-    query = this._whereFix(query, where)
+    query = this._where_replace(query, where)
 
     return this.run(query)
   }
