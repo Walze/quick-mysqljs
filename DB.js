@@ -21,7 +21,8 @@ class Database {
   get connection() {
     return this._connection
   }
-
+  
+  // Adds WHERE AND to each prop of obj
   _where_fix(query, where) {
     let counter = 0
 
@@ -39,7 +40,8 @@ class Database {
     }
     return query
   }
-
+  
+  // Helper
   _callback_to_promise(error, result, resolve, reject) {
     if (error) reject(error)
     else resolve(result)
