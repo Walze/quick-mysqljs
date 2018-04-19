@@ -1,7 +1,9 @@
+const configFile = require('./config.json').dev
+
 class Database {
   constructor(config, mysql) {
 
-    const _connection = mysql.createConnection({
+    this._connection = mysql.createConnection({
       host: config.host,
       user: config.username,
       password: config.password,
@@ -9,12 +11,15 @@ class Database {
       port: config.port
     })
 
-    this.getConnection = callback => callback(_connection)
     this._mysql = mysql
   }
 
   get mysql() {
-    return this._mysql
+    return Object.assign({}, this._mysql)
+  }
+
+  get connection() {
+    return Object.assign({}, this._connection)
   }
 
   _whereFix(query, where) {
@@ -35,35 +40,26 @@ class Database {
     return query
   }
 
-  _promiseRejRes(err, result, resolve, reject) {
-    if (err) reject(err)
+  _callback_to_promise(error, result, resolve, reject) {
+    if (error) reject(error)
     else resolve(result)
   }
 
   _query(query, params = false) {
-    return new Promise((resolve, reject) =>
-      this.getConnection(connection => {
+    return new Promise((resolve, reject) => {
+      if (typeof params === 'object')
+        this.connection.query(query, params, (error, result) => this._callback_to_promise(error, result, resolve, reject))
 
-        if (typeof params === 'object')
-          connection.query(query, params, (err, result) => this._promiseRejRes(err, result, resolve, reject))
+      else if (params === false)
+        this.connection.query(query, (error, result) => this._callback_to_promise(error, result, resolve, reject))
 
-        else if (params === false)
-          connection.query(query, (err, result) => this._promiseRejRes(err, result, resolve, reject))
-
-        else
-          throw new error('Wrong type on 2nd param.')
-      })
-    )
+      else throw new error('Wrong type on 2nd param')
+    })
   }
 
   run(query, ...params) {
     if (!params.length) params = false
-
-    return new Promise((resolve, reject) =>
-      this._query(query, params)
-        .then(result => this._promiseRejRes(false, result, resolve, reject))
-        .catch(err => this._promiseRejRes(err, false, resolve, reject))
-    )
+    return this._query(query, params)
   }
 
   all(table) {
@@ -73,7 +69,7 @@ class Database {
   }
 
   id(table, id) {
-    const query = `SELECT * FROM ${connection.escape(table)} WHERE id = ${id}`
+    const query = `SELECT * FROM ${table} WHERE id = ${id}`
 
     return this.run(query)
   }
@@ -99,12 +95,11 @@ class Database {
   }
 
   delete(table, where) {
-    let query = this.mysql.format(`DELETE * FROM ${table} WHERE ?`)
+    let query = this.mysql.format(`DELETE FROM ${table} WHERE ?`)
     query = this._whereFix(query, where)
 
     return this.run(query)
   }
 }
 
-const configFile = require('./config.json').dev
 module.exports = new Database(configFile, require('mysql'))
