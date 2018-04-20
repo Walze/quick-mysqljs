@@ -52,7 +52,11 @@ class Database {
       else if (values === false)
         this._connection.query(query, (error, result) => this._callback_to_promise(error, result, resolve, reject))
 
-      else throw new error('Wrong type on 2nd param')
+      else {
+        const error = new TypeError('Second parameter has to be either Object or Array')
+        throw error
+        reject(error)
+      }
     })
   }
 
