@@ -47,7 +47,7 @@ class Database {
     else resolve(result)
   }
 
-  _query(query, params = false) {
+  _query(query, params) {
     return new Promise((resolve, reject) => {
       if (typeof params === 'object')
         this.connection.query(query, params, (error, result) => this._callback_to_promise(error, result, resolve, reject))
