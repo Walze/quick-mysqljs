@@ -16,11 +16,9 @@ const PORT = 3001
 app.listen(PORT, e => console.log(`Listening on port ${PORT}`))
 
 
+// Example
 const db = require('./DB')
-
-db.run('SELECT 1 + 1 as sum')
-  .then(log)
-  .catch(log)
+db.run('SELECT 2 * 2 as result').then(log)
 
 
 

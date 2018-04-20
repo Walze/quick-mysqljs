@@ -14,30 +14,27 @@ class Database {
     this._mysql = mysql
   }
 
-  get mysql() {
-    return this._mysql
-  }
-
-  get connection() {
-    return this._connection
-  }
-
   // Adds WHERE AND to each prop of obj
   _where_replace(query, where) {
     let counter = 0
+    let whereStart = query.indexOf('WHERE ?')
 
-    for (let prop in where) {
-      counter++
+    if (whereStart > -1)
+      for (let prop in where) {
+        counter++
 
-      let whereStart = query.indexOf('WHERE ?')
+        whereStart = query.indexOf('WHERE ?')
 
-      if (whereStart > -1)
-        query = query.slice(0, whereStart + 6)
-      if (counter >= Object.keys(where).length)
-        query += `\`${prop}\` = '${where[prop]}'`
-      else
-        query += `\`${prop}\` = '${where[prop]}' AND `
-    }
+        // remove 'WHERE ?'
+        if (whereStart > -1)
+          query = query.slice(0, whereStart + 6)
+
+        if (counter >= Object.keys(where).length)
+          query += `\`${prop}\` = '${where[prop]}'`
+        else
+          query += `\`${prop}\` = '${where[prop]}' AND `
+      }
+
     return query
   }
 
@@ -47,22 +44,19 @@ class Database {
     else resolve(result)
   }
 
-  _query(query, params) {
+  run(query, values = false) {
     return new Promise((resolve, reject) => {
-      if (typeof params === 'object')
-        this.connection.query(query, params, (error, result) => this._callback_to_promise(error, result, resolve, reject))
+      if (typeof values === 'object' || typeof values === 'array')
+        this._connection.query(query, values, (error, result) => this._callback_to_promise(error, result, resolve, reject))
 
-      else if (params === false)
-        this.connection.query(query, (error, result) => this._callback_to_promise(error, result, resolve, reject))
+      else if (values === false)
+        this._connection.query(query, (error, result) => this._callback_to_promise(error, result, resolve, reject))
 
       else throw new error('Wrong type on 2nd param')
     })
   }
 
-  run(query, ...params) {
-    if (!params.length) params = false
-    return this._query(query, params)
-  }
+  // Quick Queries
 
   all(table) {
     const query = `SELECT * FROM ${table}`
@@ -77,27 +71,27 @@ class Database {
   }
 
   find(table, where) {
-    let query = this.mysql.format(`SELECT * FROM ${table} WHERE ?`)
+    let query = this._mysql.format(`SELECT * FROM ${table} WHERE ?`)
     query = this._where_replace(query, where)
 
     return this.run(query)
   }
 
   insert(table, set) {
-    const query = this.mysql.format(`INSERT INTO ${table} SET ?`, set)
+    const query = this._mysql.format(`INSERT INTO ${table} SET ?`, set)
 
     return this.run(query)
   }
 
   update(table, set, where) {
-    let query = this.mysql.format(`UPDATE ${table} SET ? WHERE ?`, set)
+    let query = this._mysql.format(`UPDATE ${table} SET ? WHERE ?`, set)
     query = this._where_replace(query, where)
 
     return this.run(query)
   }
 
   delete(table, where) {
-    let query = this.mysql.format(`DELETE FROM ${table} WHERE ?`)
+    let query = this._mysql.format(`DELETE FROM ${table} WHERE ?`)
     query = this._where_replace(query, where)
 
     return this.run(query)
