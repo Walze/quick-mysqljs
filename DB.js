@@ -58,7 +58,6 @@ class Database {
   }
 
   // Quick Queries
-
   all(table) {
     const query = `SELECT * FROM ${table}`
 
