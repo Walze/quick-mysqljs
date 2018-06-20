@@ -15,11 +15,11 @@ const result = db.run('SELECT 2 * 2 as result')
 
 result.then(console.log).catch(console.log)
 
-// db.run(query: string)
-// db.all(table: string)
-// db.id(table: string, id: string)
-// db.find(table: string, where: object)
-// db.insert(table: string, set: object)
-// db.update(table: string, set: object, where: object)
-// db.delete(table: string, where: object)
+// db.run(query: string): Promise
+// db.all(table: string): Promise
+// db.id(table: string, id: string): Promise
+// db.find(table: string, where: object): Promise
+// db.insert(table: string, set: object): Promise
+// db.update(table: string, set: object, where: object): Promise
+// db.delete(table: string, where: object): Promise
 ```
