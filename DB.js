@@ -1,17 +1,14 @@
-const config_file = require('./config.json').dev
-
 class Database {
-  constructor(config, mysql) {
+  constructor(config) {
+    this._mysql = require('mysql')
 
-    this._connection = mysql.createConnection({
+    this._connection = this._mysql.createConnection({
       host: config.host,
       user: config.username,
       password: config.password,
       database: config.database,
       port: config.port
     })
-
-    this._mysql = mysql
   }
 
   // Adds WHERE AND to each prop of obj
@@ -54,8 +51,8 @@ class Database {
 
       else {
         const error = new TypeError('Second parameter has to be either Object or Array')
-        throw error
         reject(error)
+        throw error
       }
     })
   }
@@ -102,4 +99,4 @@ class Database {
   }
 }
 
-module.exports = new Database(config_file, require('mysql'))
+module.exports = Database
