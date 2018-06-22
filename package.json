@@ -1,14 +1,42 @@
 {
-  "name": "quick-mysqljs",
-  "version": "1.0.1",
+  "_from": "quick-mysqljs",
+  "_id": "quick-mysqljs@1.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-5mbKygEmr1VclNW+h69i6c5M4JQRpPpBOW7qKHLHH3tSk/fBIerZIfdinVlLl7A8dT/vNqFpzssgtl3MfqJD9A==",
+  "_location": "/quick-mysqljs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "quick-mysqljs",
+    "name": "quick-mysqljs",
+    "escapedName": "quick-mysqljs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/quick-mysqljs/-/quick-mysqljs-1.0.1.tgz",
+  "_shasum": "a3afef58002e8597f4a6c6e9fb631d3ee37f423c",
+  "_spec": "quick-mysqljs",
+  "_where": "C:\\Users\\yrosino\\pristine-bot",
+  "author": {
+    "name": "Wallace Fares"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "mysql": "^2.15.0"
+  },
+  "deprecated": false,
   "description": "Helper functions for mysqljs",
+  "license": "ISC",
   "main": "index.js",
+  "name": "quick-mysqljs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Wallace Fares",
-  "license": "ISC",
-  "dependencies": {
-    "mysql": "^2.15.0"
-  }
+  "version": "1.0.1"
 }

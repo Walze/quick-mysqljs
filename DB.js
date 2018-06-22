@@ -1,4 +1,4 @@
-class Database {
+module.exports = class Database {
   constructor(config) {
     this._mysql = require('mysql')
 
@@ -97,5 +97,3 @@ class Database {
     return this.run(query)
   }
 }
-
-module.exports = Database
