@@ -1,6 +1,6 @@
 {
   "name": "quick-mysqljs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helper functions for mysqljs",
   "main": "index.js",
   "scripts": {
